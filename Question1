@@ -1,0 +1,100 @@
+2196. Create Binary Tree From Descriptions
+Solved
+Medium
+Topics
+Companies
+Hint
+You are given a 2D integer array descriptions where descriptions[i] = [parenti, childi, isLefti] indicates that parenti is the parent of childi in a binary tree of unique values. Furthermore,
+
+If isLefti == 1, then childi is the left child of parenti.
+If isLefti == 0, then childi is the right child of parenti.
+Construct the binary tree described by descriptions and return its root.
+
+The test cases will be generated such that the binary tree is valid.
+
+Approach 1
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    void solve(TreeNode root, Map<Integer,Integer>mpL,Map<Integer,Integer>mpR){
+        //n1=desc.length;
+        Queue<TreeNode> q=new LinkedList<>();
+        q.add(root);
+        while(!q.isEmpty()){
+            TreeNode r=q.peek();
+            if(mpL.containsKey(r.val)){
+                TreeNode node=new TreeNode(mpL.get(r.val));
+                r.left=node;
+                q.add(node);
+
+            }
+            else{
+                r.left=null;
+            }
+            if(mpR.containsKey(r.val)){
+                TreeNode node=new TreeNode(mpR.get(r.val));
+                r.right=node;
+                q.add(node);
+
+            }else{
+                r.right=null;
+            }
+            q.poll();
+        }    
+    }
+    public TreeNode createBinaryTree(int[][] desc) {
+        Map<Integer,Integer> map=new HashMap<>(); 
+        for(int i=0;i<desc.length;i++){
+            map.put(desc[i][0],1);
+        }
+        for(int i=0;i<desc.length;i++){
+            map.put(desc[i][1],0);
+        }
+        int root=0;
+        for (Map.Entry<Integer, Integer> e : map.entrySet()){
+            if(e.getValue()==1){
+                root=e.getKey();
+                break;
+            }
+        }
+        TreeNode rt=new TreeNode(root);
+        Map<Integer,Integer> mpL=new HashMap<>();
+        Map<Integer,Integer> mpR=new HashMap<>();
+        for(int i=0;i<desc.length;i++){
+            if(desc[i][2]==1){
+                mpL.put(desc[i][0],desc[i][1]);
+            }else{
+                mpR.put(desc[i][0],desc[i][1]);
+            }
+        }
+        solve(rt,mpL,mpR);
+        return rt;
+    }
+}
+
+// for(int i=0;i<desc.length;i++){
+//           int b=desc[i][0];
+//           TreeNode rt=new TreeNode(b);
+//           int c=desc[i][1];
+//           TreeNode rt1=new TreeNode(c);
+//           int d=desc[i][2];
+//           if(d==1){
+//             rt.left=rt1;
+//           }else{
+//             rt.right=r1;
+//           }
+//           return rt;
+//         }
