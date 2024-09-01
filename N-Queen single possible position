@@ -1,0 +1,56 @@
+import java.util.*;
+public class Main
+{
+	public static void main(String[] args) {
+		System.out.println("N-Queen Problem");
+		int N=3;
+		int sol[][]=new int[N][N];
+		
+		if(solve(0,sol,N)==true){
+		    printSol(sol);
+		}
+		else{
+		    System.out.println("Solution doesn't exist");
+		}
+	}
+	public static void printSol(int sol[][]){
+	    for(int i=0;i<sol.length;i++){
+	        for(int j=0;j<sol[i].length;j++){
+	            System.out.print(sol[i][j]+" ");
+	        }
+	        System.out.println();
+	    }
+	}
+	public static boolean isSafe(int row,int col,int sol[][],int N){
+	    //left side of same row
+	    for(int i=0;i<col;i++){
+	        if(sol[row][i]==1) return false;
+	    }
+	    
+	    //upper diagonal
+	    for(int i=row,j=col;i>=0&&j>=0;i--,j--)
+	    {
+	        if(sol[i][j]==1) return false;
+	    }
+	    
+	    //lower diagonal
+	    for(int i=row,j=col;i<N&&j>=0;i++,j--){
+	        if(sol[i][j]==1) return false;
+	    }
+	    return true;
+	}
+	public static boolean solve(int col,int sol[][],int N){
+	    if(col>=N){
+	        return true;
+	    }
+	    for(int r=0;r<N;r++){
+            if(isSafe(r,col,sol,N)){
+	            sol[r][col]=1;
+               	if(solve(col+1,sol,N)==true){
+               	    return true;
+               	}            
+	            sol[r][col]=0;
+	    }}
+	    return false;
+	}
+}
